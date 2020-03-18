@@ -1,0 +1,4 @@
+name: Repository Checker
+
+on: [push, pull_request]
+

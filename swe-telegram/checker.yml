@@ -24,6 +24,8 @@ jobs:
         node-version: 12.x
     - name: Run dependencies installation
       run: npm ci
+    - name: Run project formatter and linter
+      run: npm run prettier-eslint
     - name: Run project build
       run: npm run build --if-present
     - name: Run project test 
@@ -46,5 +48,4 @@ jobs:
         username: 'CI Checker'
         url: ${{ secrets.SLACK_SW_WEBHOOK }}
         commit: true
-        token: ${{ secrets.GITHUB_TOKEN }}
-        
+        token: ${{ secrets.GITHUB_TOKEN }}  

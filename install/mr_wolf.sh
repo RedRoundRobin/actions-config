@@ -2,7 +2,7 @@
 echo "> You read the bible, Brett? Let's see..."
 if [ -d "thirema" ] 
 then
-	docker-compose down -v -f \
+	docker-compose down -v \
 	-f thirema/docker-compose.thirema.yml \
 	-f thirema/swe-kafka-db/kafka/docker-compose.thirema.yml
 	rm -rf thirema/

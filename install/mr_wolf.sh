@@ -3,8 +3,8 @@ echo "> You read the bible, Brett? Let's see..."
 if [ -d "thirema" ] 
 then
 	docker-compose  \
-	-f thirema/docker-compose.thirema.yml \
 	-f thirema/docker-compose.yml \
+	-f thirema/docker-compose.thirema.yml \
 	down -v
 	rm -rf ./thirema/
 fi
@@ -18,7 +18,7 @@ echo "> Have you ever given a foot massage? Stay calm and relax ..."
 cp ./docker-compose.thirema.yml thirema/
 mv ./thirema/swe-kafka-db/kafka/* thirema/
 docker-compose \
-	-f thirema/docker-compose.thirema.yml \
 	-f thirema/docker-compose.yml \
+	-f thirema/docker-compose.thirema.yml \
 	up --build -d
 echo "> Mr. wolf solved our problems."

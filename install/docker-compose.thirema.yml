@@ -8,7 +8,9 @@ services:
   api:
     container_name: thirema_api
     build: ./swe-api
+    networks:
+      - kafka-net
     ports:
-    - "9999:9999"
+      - "9999:9999"
   
     

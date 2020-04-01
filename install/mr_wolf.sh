@@ -4,7 +4,7 @@ if [ -d "thirema" ]
 then
 	docker-compose  \
 	-f thirema/docker-compose.thirema.yml \
-	-f thirema/swe-kafka-db/kafka/docker-compose.yml \
+	-f thirema/docker-compose.yml \
 	down -v
 	rm -rf ./thirema/
 fi

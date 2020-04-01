@@ -2,4 +2,4 @@
 
 # Github Actions configurations
 
-Repository per la configurazione della CI e dei .gitignore
+Repository per la configurazione della CI, dei .gitignore e dell'installazione docker

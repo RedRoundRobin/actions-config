@@ -2,9 +2,10 @@
 echo "> You read the bible, Brett? Let's see..."
 if [ -d "thirema" ] 
 then
-	docker-compose down -v \
+	docker-compose  \
 	-f thirema/docker-compose.thirema.yml \
-	-f thirema/swe-kafka-db/kafka/docker-compose.yml
+	-f thirema/swe-kafka-db/kafka/docker-compose.yml \
+	down -v
 	rm -rf ./thirema/
 fi
 mkdir thirema
@@ -15,7 +16,9 @@ git clone https://github.com/RedRoundRobin/swe-telegram thirema/swe-telegram
 git clone https://github.com/RedRoundRobin/swe-webapp thirema/swe-webapp
 echo "> Have you ever given a foot massage? Stay calm and relax ..."
 cp ./docker-compose.thirema.yml thirema/
-docker-compose up --build -d \
+mv ./thirema/swe-kafka-db/kafka/* thirema/
+docker-compose \
 	-f thirema/docker-compose.thirema.yml \
-	-f thirema/swe-kafka-db/kafka/docker-compose.yml
+	-f thirema/docker-compose.yml \
+	up --build -d
 echo "> Mr. wolf solved our problems."

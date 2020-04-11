@@ -12,5 +12,12 @@ services:
       - kafka-net
     ports:
       - "9999:9999"
+  telegram_bot:
+    container_name: thirema_telegram_bot
+    build: ./swe-telegram
+    networks:
+      - kafka-net
+    ports:
+      - "3000:3000"
   
     

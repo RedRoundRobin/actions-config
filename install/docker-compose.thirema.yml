@@ -26,14 +26,11 @@ services:
     build: ./swe-gateway
     networks:
       - kafka-net
-    ports:
-      - "29092:29092"
+      
   data_collector:
     container_name: thirema_data_collector
     build: ./swe-kafka-db
     networks:
       - kafka-net
-    ports:
-      - "29092:29092"
   
     

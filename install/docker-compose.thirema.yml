@@ -6,14 +6,14 @@ networks:
 
 services:
   api:
-    container_name: thirema_api
+    container_name: thirema-api
     build: ./swe-api
     networks:
       - kafka-net
     ports:
       - "9999:9999"
   telegram_bot:
-    container_name: thirema_telegram_bot
+    container_name: thirema-telegram-bot
     build: ./swe-telegram
     networks:
       - kafka-net
@@ -22,21 +22,23 @@ services:
 
   # Under testing
   gateway:
-    container_name: thirema_gateway
+    container_name: thirema-gateway
     build: ./swe-gateway
     networks:
       - kafka-net
       
   data_collector:
-    container_name: thirema_data_collector
+    container_name: thirema-data-collector
     build: ./swe-kafka-db
     networks:
       - kafka-net
 
   webapp:
-    container_name: thirema_webapp
+    container_name: thirema-webapp
     build: ./swe-webapp
     networks:
       - kafka-net
+    ports:
+      - "80:9000"
   
     

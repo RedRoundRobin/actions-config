@@ -32,5 +32,11 @@ services:
     build: ./swe-kafka-db
     networks:
       - kafka-net
+
+  webapp:
+    container_name: thirema_webapp
+    build: ./swe-webapp
+    networks:
+      - kafka-net
   
     

@@ -39,6 +39,6 @@ services:
     networks:
       - kafka-net
     ports:
-      - "80:8000"
+      - "8000:8000"
   
     

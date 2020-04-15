@@ -34,5 +34,5 @@ docker-compose \
 	-f thirema/docker-compose.thirema.yml \
 	up --build -d
 echo "${ORANGE}[Mr. Wolf] ${GREEN} Avvio dei container completato!"
-echo "============================================="
-echo "> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems <"
+echo "${NC} ============================================="
+echo "${NC}> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems ${NC} <"

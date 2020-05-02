@@ -14,22 +14,48 @@ ORANGE='\033[0;33m'
 RED='\033[0;31m'
 NC='\033[0m' # No Color
 
+
+startingmessage () {
+    echo "${GREEN}[Mr. Wolf]${NC} $1"
+    echo "${NC}============================================="
+}
+
+finalmessage () {
+    echo "${NC} ============================================="
+    echo "${NC}> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems ${NC} <"
+}
+
 dockercompose_up () {
     echo "${ORANGE}[Mr. Wolf] ${NC} Installazione e avvio dei container Docker in corso..."
     docker-compose \
         -f riot/docker-compose.yml \
-        -f riot/docker-compose.thirema.yml \
+        -f riot/docker-compose.riot.yml \
         up --build -d
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Avvio dei container completato!"
 }
 
 dockercompose_down () {
-    echo "${ORANGE}[Mr. Wolf] ${NC} Rimozione dei servizi attivi ..."
+    echo "${ORANGE}[Mr. Wolf] ${NC} Stop dei servizi attivi ..."
     docker-compose  \
         -f riot/docker-compose.yml \
-        -f riot/docker-compose.thirema.yml \
-        down -v
+        -f riot/docker-compose.riot.yml \
+        down 
+    echo "${ORANGE}[Mr. Wolf] ${GREEN} Stop eseguito!"
+}
+
+dockercompose_down_v () {
+    echo "${ORANGE}[Mr. Wolf] ${NC} Rimozione dei servizi attivi, delle immagini e dei volumi ..."
+    docker-compose  \
+        -f riot/docker-compose.yml \
+        -f riot/docker-compose.riot.yml \
+        down -v 
+        docker image prune -f
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Rimozione eseguita!"
+}
+
+
+errormex () {
+    echo "${RED}[Errore:] $1"
 }
 
 
@@ -47,6 +73,14 @@ then
 fi
 
 if [ $1 = "init" ]
+
+    if [ -f "./riot/riot-installed.lock" ]
+    then 
+        errormex "È già presente un'installazione di RIoT. Esegui prima [remove], oppure cancella la cartella (riot/) prima di continuare."
+        exit 1
+    fi 
+    
+    startingmessage "Avvio della prima installazione di RIoT"
     echo "${ORANGE}[Mr. Wolf] ${NC} Copia delle componenti software ..."
     mkdir riot
     cp kafka-db riot/kafka-db
@@ -54,71 +88,59 @@ if [ $1 = "init" ]
     cp api riot/api
     cp telegram riot/telegram
     cp webapp riot/webapp
+    cp ./docker-compose.riot.yml riot/
+    mv ./riot/kafka-db/kafka/docker-compose.yml riot/docker-compose.yml
+    touch ./riot/riot-installed.lock
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Componenti copiate con successo!"
-    cp ./docker-compose.riot.yml thirema/
-    mv ./thirema/swe-kafka-db/kafka/* thirema/
-    echo "${ORANGE}[Mr. Wolf] ${NC} Installazione e avvio dei container Docker in corso..."
-    docker-compose \
-        -f thirema/docker-compose.yml \
-        -f thirema/docker-compose.thirema.yml \
-        up --build -d
-    echo "${ORANGE}[Mr. Wolf] ${GREEN} Avvio dei container completato!"
-    echo "${NC} ============================================="
-    echo "${NC}> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems ${NC} <"
+    dockercompose_up 
+    finalmessage
     exit 0
 fi
 
 
 if [ $1 = "start" ]
-
+    if [ ! -f "./riot/riot-installed.lock" ]
+    then 
+        errormex "Nessuna installazione del prodotto trovata."
+        exit 1
+    fi 
+    startingmessage "Avvio dei servizi RIoT"
+    dockercompose_up
+    finalmessage
     exit 0
 fi
 
 if [ $1 = "stop" ]
-    
+    if [ ! -f "./riot/riot-installed.lock" ]
+    then 
+        errormex "Nessuna installazione del prodotto trovata."
+        exit 1
+    fi 
+    startingmessage "Stop dei servizi RIoT"
+    dockercompose_down
+    finalmessage
     exit 0
 fi
 
 
 if [ $1 = "remove" ]
-
-    exit 0
-fi
-
-
-if [ $1 = "autodevmode" ]
-then
-    echo "${RED}[ATTENZIONE:] AVVIO IN AUTODEVMODE..."
-    echo "${NC}============================================="
-    echo "${ORANGE}[Mr. Wolf] ${NC} Avvio installazione ThiReMa ..."
-    if [ -d "thirema" ] 
+    if [ ! -f "./riot/riot-installed.lock" ]
+    then 
+        errormex "Nessuna installazione del prodotto trovata."
+        exit 1
+    fi 
+    echo "La rimozione di RIoT comporta la rimozione delle dangling images da docker, dei volumi e dei container."
+    read -r -p "Sei sicuro di voler proseguire? [y/N] " response
+    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
     then
-        echo "${ORANGE}[Mr. Wolf] ${NC} Rimozione dei servizi attivi ..."
-        docker-compose  \
-        -f thirema/docker-compose.yml \
-        -f thirema/docker-compose.thirema.yml \
-        down -v
-        docker image prune -f
-        rm -rf ./thirema/
-        echo "${ORANGE}[Mr. Wolf] ${GREEN} Rimozione eseguita!"
+        startingmessage "Stop e rimozione dei servizi RIoT dalla macchina.."
+        dockercompose_down_v
+        rm -rf ./riot/   
+        finalmessage  
+    else
+        echo "Pericolo scampato :)"
     fi
-    echo "${ORANGE}[Mr. Wolf] ${NC} Scaricamento delle componenti software ..."
-    mkdir thirema
-    git clone https://github.com/RedRoundRobin/swe-kafka-db thirema/kafka-db
-    git clone https://github.com/RedRoundRobin/swe-gateway thirema/gateway
-    git clone https://github.com/RedRoundRobin/swe-api thirema/api
-    git clone https://github.com/RedRoundRobin/swe-telegram thirema/telegram
-    git clone https://github.com/RedRoundRobin/swe-webapp thirema/webapp
-    echo "${ORANGE}[Mr. Wolf] ${GREEN} Componenti scaricate con successo!"
-    cp ./docker-compose.thirema.yml thirema/
-    mv ./thirema/kafka-db/kafka/* thirema/
-    echo "${ORANGE}[Mr. Wolf] ${NC} Installazione e avvio dei container Docker in corso..."
-    docker-compose \
-        -f thirema/docker-compose.yml \
-        -f thirema/docker-compose.thirema.yml \
-        up --build -d
-    echo "${ORANGE}[Mr. Wolf] ${GREEN} Avvio dei container completato!"
-    echo "${NC} ============================================="
-    echo "${NC}> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems ${NC} <"
+
     exit 0
 fi
+

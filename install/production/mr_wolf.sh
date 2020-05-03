@@ -53,7 +53,6 @@ dockercompose_down_v () {
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Rimozione eseguita!"
 }
 
-
 errormex () {
     echo "${RED}[Errore:] $1"
 }
@@ -61,6 +60,7 @@ errormex () {
 
 if [ $# = 0 ] || [ $1 = "help" ]
 then
+    echo " "
     echo "I'm Mr Wolf. Tell me what the problem is.. "
     echo "[USAGE:] ${ORANGE}mr_wolf.sh ${NC}[command]"
     echo " ${NC}"
@@ -69,11 +69,10 @@ then
     echo "${GREEN}start     ${NC}Avvio di tutti i servizi RIoT"
     echo "${ORANGE}stop      ${NC}Stop di tutti i servizi RIoT"
     echo "${RED}remove    ${NC}Stop e rimozione di tutti i servizi RIoT"
-    echo "${RED}autodevmode       ${RED}[NOT FOR PRODUCTION] ${NC}Auto re-installazione automatica delle componenti in remoto dai branch develop"
 fi
 
 if [ $1 = "init" ]
-
+then
     if [ -f "./riot/riot-installed.lock" ]
     then 
         errormex "È già presente un'installazione di RIoT. Esegui prima [remove], oppure cancella la cartella (riot/) prima di continuare."

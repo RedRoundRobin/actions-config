@@ -25,44 +25,45 @@ finalmessage () {
     echo "${NC}> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems ${NC} <"
 }
 
-dockercompose_status () {
+errormex () {
+    echo "${RED}[Errore:] $1"
+}
+
+dockercompose_cmd () {
     docker-compose \
         -f riot/docker-compose.yml \
         -f riot/docker-compose.riot.yml \
-        ps
-    
+        $1
+}
+
+dockercompose_status () {
+    dockercompose_cmd "ps"
 }
 
 dockercompose_up () {
     echo "${ORANGE}[Mr. Wolf] ${NC} Installazione e avvio dei container Docker in corso..."
-    docker-compose \
-        -f riot/docker-compose.yml \
-        -f riot/docker-compose.riot.yml \
-        up --build -d
+    dockercompose_cmd "up --build -d"
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Avvio dei container completato!"
 }
 
-dockercompose_down () {
+
+dockercompose_start () {
+    echo "${ORANGE}[Mr. Wolf] ${NC} Avvio dei container Docker in corso..."
+    dockercompose_cmd "start"
+    echo "${ORANGE}[Mr. Wolf] ${GREEN} Avvio dei container completato!"
+}
+
+dockercompose_stop () {
     echo "${ORANGE}[Mr. Wolf] ${NC} Stop dei servizi attivi ..."
-    docker-compose  \
-        -f riot/docker-compose.yml \
-        -f riot/docker-compose.riot.yml \
-        down 
+    dockercompose_cmd "stop"
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Stop eseguito!"
 }
 
-dockercompose_down_v () {
+dockercompose_down () {
     echo "${ORANGE}[Mr. Wolf] ${NC} Rimozione dei servizi attivi, delle immagini e dei volumi ..."
-    docker-compose  \
-        -f riot/docker-compose.yml \
-        -f riot/docker-compose.riot.yml \
-        down -v 
-        docker image prune -f
+    dockercompose_cmd "down -v"
+    docker image prune -f
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Rimozione eseguita!"
-}
-
-errormex () {
-    echo "${RED}[Errore:] $1"
 }
 
 
@@ -103,6 +104,17 @@ then
     finalmessage
     exit 0
 
+elif [ $1 = "status" ]
+then
+    if [ ! -f "./riot/riot-installed.lock" ]
+    then 
+        errormex "Nessuna installazione del prodotto trovata."
+        exit 1
+    fi 
+    startingmessage "Status dei servizi RIoT"
+    dockercompose_status
+    exit 0
+
 elif [ $1 = "start" ]
 then
     if [ ! -f "./riot/riot-installed.lock" ]
@@ -111,7 +123,7 @@ then
         exit 1
     fi 
     startingmessage "Avvio dei servizi RIoT"
-    dockercompose_up
+    dockercompose_start
     finalmessage
     exit 0
 
@@ -123,7 +135,7 @@ then
         exit 1
     fi 
     startingmessage "Stop dei servizi RIoT"
-    dockercompose_down
+    dockercompose_stop
     finalmessage
     exit 0
 
@@ -139,7 +151,7 @@ then
     if [ "$response" = "y" ] || [ "$response" = "Y" ]
     then
         startingmessage "Stop e rimozione dei servizi RIoT dalla macchina.."
-        dockercompose_down_v
+        dockercompose_down
         rm -rf ./riot/   
         finalmessage  
     else

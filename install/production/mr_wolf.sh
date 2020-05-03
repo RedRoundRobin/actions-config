@@ -25,6 +25,14 @@ finalmessage () {
     echo "${NC}> ${ORANGE}Mr. Wolf ${GREEN} solved our ${RED} problems ${NC} <"
 }
 
+dockercompose_status () {
+    docker-compose \
+        -f riot/docker-compose.yml \
+        -f riot/docker-compose.riot.yml \
+        ps
+    
+}
+
 dockercompose_up () {
     echo "${ORANGE}[Mr. Wolf] ${NC} Installazione e avvio dei container Docker in corso..."
     docker-compose \
@@ -65,6 +73,7 @@ then
     echo "[USAGE:] ${ORANGE}mr_wolf.sh ${NC}[command]"
     echo " ${NC}"
     echo "${NC}help      ${NC}Comandi di aiuto per lo script"
+    echo "${NC}status      ${NC}Status dei servizi RIoT"
     echo "${GREEN}init      ${NC}Prima installazione e avvio di tutti i servizi RIoT"
     echo "${GREEN}start     ${NC}Avvio di tutti i servizi RIoT"
     echo "${ORANGE}stop      ${NC}Stop di tutti i servizi RIoT"
@@ -87,7 +96,7 @@ then
     cp -r telegram riot/telegram
     cp -r webapp riot/webapp
     cp ./docker-compose.riot.yml riot/
-    mv ./riot/kafka-db/kafka/ riot/
+    mv ./riot/kafka-db/kafka/* riot/
     touch ./riot/riot-installed.lock
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Componenti copiate con successo!"
     dockercompose_up 

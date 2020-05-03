@@ -87,7 +87,7 @@ then
     cp -r telegram riot/telegram
     cp -r webapp riot/webapp
     cp ./docker-compose.riot.yml riot/
-    mv ./riot/kafka-db/kafka/docker-compose.yml riot/
+    mv ./riot/kafka-db/kafka/ riot/
     touch ./riot/riot-installed.lock
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Componenti copiate con successo!"
     dockercompose_up 

@@ -69,9 +69,8 @@ then
     echo "${GREEN}start     ${NC}Avvio di tutti i servizi RIoT"
     echo "${ORANGE}stop      ${NC}Stop di tutti i servizi RIoT"
     echo "${RED}remove    ${NC}Stop e rimozione di tutti i servizi RIoT"
-fi
 
-if [ $1 = "init" ]
+elif [ $1 = "init" ]
 then
     if [ -f "./riot/riot-installed.lock" ]
     then 
@@ -94,10 +93,9 @@ then
     dockercompose_up 
     finalmessage
     exit 0
-fi
 
-
-if [ $1 = "start" ]
+elif [ $1 = "start" ]
+then
     if [ ! -f "./riot/riot-installed.lock" ]
     then 
         errormex "Nessuna installazione del prodotto trovata."
@@ -107,9 +105,9 @@ if [ $1 = "start" ]
     dockercompose_up
     finalmessage
     exit 0
-fi
 
-if [ $1 = "stop" ]
+elif [ $1 = "stop" ]
+then 
     if [ ! -f "./riot/riot-installed.lock" ]
     then 
         errormex "Nessuna installazione del prodotto trovata."
@@ -119,10 +117,9 @@ if [ $1 = "stop" ]
     dockercompose_down
     finalmessage
     exit 0
-fi
 
-
-if [ $1 = "remove" ]
+elif [ $1 = "remove" ]
+then 
     if [ ! -f "./riot/riot-installed.lock" ]
     then 
         errormex "Nessuna installazione del prodotto trovata."

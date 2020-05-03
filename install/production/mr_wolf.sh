@@ -81,13 +81,13 @@ then
     startingmessage "Avvio della prima installazione di RIoT"
     echo "${ORANGE}[Mr. Wolf] ${NC} Copia delle componenti software ..."
     mkdir riot
-    cp kafka-db riot/kafka-db
-    cp gateway riot/gateway
-    cp api riot/api
-    cp telegram riot/telegram
-    cp webapp riot/webapp
+    cp -r kafka-db riot/kafka-db
+    cp -r gateway riot/gateway
+    cp -r api riot/api
+    cp -r telegram riot/telegram
+    cp -r webapp riot/webapp
     cp ./docker-compose.riot.yml riot/
-    mv ./riot/kafka-db/kafka/docker-compose.yml riot/docker-compose.yml
+    mv ./riot/kafka-db/kafka/docker-compose.yml riot/
     touch ./riot/riot-installed.lock
     echo "${ORANGE}[Mr. Wolf] ${GREEN} Componenti copiate con successo!"
     dockercompose_up 
@@ -127,7 +127,7 @@ then
     fi 
     echo "La rimozione di RIoT comporta la rimozione delle dangling images da docker, dei volumi e dei container."
     read -r -p "Sei sicuro di voler proseguire? [y/N] " response
-    if [[ "$response" =~ ^([yY][eE][sS]|[yY])$ ]]
+    if [ "$response" = "y" ] || [ "$response" = "Y" ]
     then
         startingmessage "Stop e rimozione dei servizi RIoT dalla macchina.."
         dockercompose_down_v

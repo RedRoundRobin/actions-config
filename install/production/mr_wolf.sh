@@ -31,7 +31,6 @@ errormex () {
 
 dockercompose_cmd () {
     docker-compose \
-        -f riot/docker-compose.yml \
         -f riot/docker-compose.riot.yml \
         $1
 }

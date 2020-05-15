@@ -104,7 +104,9 @@ services:
     networks:
       - kafka-net
   depends_on:
-      - kafka     
+      - kafka 
+      - postgres
+      - timescale    
 
 volumes:
   zookeeper_data:

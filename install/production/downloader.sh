@@ -3,4 +3,4 @@ git clone https://github.com/RedRoundRobin/swe-gateway gateway &&
 git clone https://github.com/RedRoundRobin/swe-api api &&
 git clone https://github.com/RedRoundRobin/swe-telegram telegram &&
 git clone https://github.com/RedRoundRobin/swe-webapp webapp &&
-mv ./riot/kafka-db/kafka/* ./ 
+mv ./kafka-db/kafka/* ./ 

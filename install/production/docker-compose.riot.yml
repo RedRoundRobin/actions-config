@@ -103,7 +103,7 @@ services:
     build: ./kafka-db
     networks:
       - kafka-net
-  depends_on:
+    depends_on:
       - kafka 
       - postgres
       - timescale    
